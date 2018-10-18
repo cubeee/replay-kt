@@ -16,6 +16,7 @@ import com.x7ff.parser.replay.Package.Companion.readPackages
 import com.x7ff.parser.replay.stream.Frame
 import com.x7ff.parser.replay.stream.Frame.Companion.readFrame
 import com.x7ff.parser.replay.stream.SpawnedReplication
+import java.io.File
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
@@ -49,7 +50,12 @@ data class Replay(
     }
 
     companion object {
-        fun parse(path: Path): Replay {
+        fun parse(path: File): Replay? = parse(path.toPath())
+        fun parse(path: Path): Replay? {
+            if (Files.isDirectory(path)) {
+                return null
+            }
+
             val bytes = Files.readAllBytes(path)
             val byteBuffer = ByteBuffer.wrap(bytes)
             val buffer = BitBuffer(byteBuffer)
@@ -70,7 +76,7 @@ data class Replay(
             val keyFrames = replayBuffer.readKeyFrames()
 
             val networkStreamLength = replayBuffer.getUInt().toInt()
-            val networkStream = replayBuffer.get(networkStreamLength) // todo: parse
+            val networkStream = replayBuffer.get(networkStreamLength)
 
             val messages = replayBuffer.readMessages()
             val marks = replayBuffer.readMarks()

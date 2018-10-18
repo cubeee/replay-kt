@@ -38,7 +38,7 @@ data class Property(
                     for (i in 0 until len) {
                         propertiesList.add(readProperties())
                     }
-                    propertiesList
+                    propertiesList.toList()
                 }
                 else -> throw RuntimeException("Unknown property type '$type'")
             }

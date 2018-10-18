@@ -41,7 +41,6 @@ data class RigidBodyStateAttribute(
     }
 
     override fun toString(): String {
-        //return "RigidBodyStateAttribute(\n\t\tsleeping=$sleeping, \n\t\tposition=$position, \n\t\trotation=$rotation, \n\t\tlinearVelocity=$linearVelocity, \n\t\tangularVelocity=$angularVelocity)"
         return "RigidBodyStateAttribute(sleeping=$sleeping, position=$position, rotation=$rotation, linearVelocity=$linearVelocity, angularVelocity=$angularVelocity)"
     }
 
