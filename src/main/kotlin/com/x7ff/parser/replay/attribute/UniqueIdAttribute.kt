@@ -11,11 +11,23 @@ data class UniqueIdAttribute(
 ) {
     companion object {
         fun BitBuffer.readUniqueId(versions: Versions): UniqueIdAttribute {
-            // TODO: implement rest of the platforms
             val platform = Platform.values()[getByte().toInt()]
+            return readUniqueId(versions, platform)
+        }
+
+        fun BitBuffer.readUniqueId(versions: Versions, platform: Platform): UniqueIdAttribute {
+            // TODO: implement rest of the platforms
             val id = when (platform) {
                 Platform.SPLIT_SCREEN -> getUInt(24)
                 Platform.STEAM -> getLong()
+                Platform.PS4 -> {
+                    if (versions.patchVersion >= 1) {
+                        getBits(40 * 8)
+                    } else {
+                        getBits(32 * 8)
+                    }
+                }
+                Platform.XBOX -> getLong()
                 else -> throw IllegalArgumentException("Invalid platform type: $platform")
             }
             val playerNumber = getByte()

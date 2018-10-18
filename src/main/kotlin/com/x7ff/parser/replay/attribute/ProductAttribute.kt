@@ -8,7 +8,7 @@ data class ProductAttribute(
     val unknown: Boolean,
     val objectId: Int,
     val objectName: String,
-    val value: Int
+    val value: Any
 ) {
     companion object {
         fun BitBuffer.readProductAttribute(
@@ -18,9 +18,10 @@ data class ProductAttribute(
             val unknown = getBoolean()
             val objectId = getUInt().toInt()
             val objectName = objectReferences[objectId].name
-            val value = when(objectName) {
+            val value: Any = when(objectName) {
                 "TAGame.ProductAttribute_Painted_TA" -> readPainted(versions)
-                "TAGame.ProductAttribute_UserColor_TA" -> readColor()
+                "TAGame.ProductAttribute_UserColor_TA" -> readColor(versions)
+                "TAGame.ProductAttribute_TitleID_TA" -> getFixedLengthString()
                 else -> throw IllegalArgumentException("Unknown object name $objectName for id $objectId")
             }
             return ProductAttribute(unknown, objectId, objectName, value)
@@ -29,11 +30,14 @@ data class ProductAttribute(
         private fun BitBuffer.readPainted(versions: Versions): Int {
             return when {
                 versions.gte(868, 18, 0) -> getUInt(31).toInt()
-                else -> getUInt(13).toInt()
+                else -> getUIntMax(14).toInt()
             }
         }
 
-        private fun BitBuffer.readColor(): Int {
+        private fun BitBuffer.readColor(versions: Versions): Any {
+            if (versions.licenseeVersion >= 23) {
+                return arrayOf(getByte(), getByte(), getByte(), getByte())
+            }
             val hasValue = getBoolean()
             return when (hasValue) {
                 true -> getUInt(31).toInt()

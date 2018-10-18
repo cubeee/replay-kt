@@ -6,16 +6,23 @@ import com.x7ff.parser.replay.ClassNetCacheProperty
 import com.x7ff.parser.replay.ObjectReference
 import com.x7ff.parser.replay.Vector3d.Companion.readVector
 import com.x7ff.parser.replay.Versions
+import com.x7ff.parser.replay.attribute.ClientLoadoutOnlineAttribute.Companion.readClientLoadoutOnline
 import com.x7ff.parser.replay.attribute.DemolishAttribute.Companion.readDemolish
+import com.x7ff.parser.replay.attribute.ExplosionAttribute.Companion.readExplosion
 import com.x7ff.parser.replay.attribute.ExtendedExplosionAttribute.Companion.readExtendedExplosion
+import com.x7ff.parser.replay.attribute.LoadoutAttribute.Companion.readLoadout
 import com.x7ff.parser.replay.attribute.LoadoutsAttribute.Companion.readLoadouts
 import com.x7ff.parser.replay.attribute.LoadoutsOnlineAttribute.Companion.readLoadoutsOnline
+import com.x7ff.parser.replay.attribute.MusicStingerAttribute.Companion.readMusicStinger
+import com.x7ff.parser.replay.attribute.PartyLeaderAttribute.Companion.readPartyLeader
 import com.x7ff.parser.replay.attribute.PickupAttribute.Companion.readPickupData
 import com.x7ff.parser.replay.attribute.ReservationAttribute.Companion.readReservation
 import com.x7ff.parser.replay.attribute.RigidBodyStateAttribute.Companion.readRigidBodyState
 import com.x7ff.parser.replay.attribute.StatEventAttribute.Companion.readStatEvent
 import com.x7ff.parser.replay.attribute.TeamPaint.Companion.readTeamPaint
+import com.x7ff.parser.replay.attribute.TitleAttribute.Companion.readTitle
 import com.x7ff.parser.replay.attribute.UniqueIdAttribute.Companion.readUniqueId
+import com.x7ff.parser.replay.attribute.WeldedInfoAttribute.Companion.readWeldedInfo
 import com.x7ff.parser.replay.stream.ActiveActor.Companion.readActiveActor
 import com.x7ff.parser.replay.stream.CameraSettings.Companion.readCameraSettings
 import com.x7ff.parser.replay.stream.ObjectTarget.Companion.readObjectTarget
@@ -59,9 +66,11 @@ data class UpdatedReplication(
                 "TAGame.GameEvent_Soccar_TA:SubRulesArchetype" -> readObjectTarget()
 
                 "TAGame.CameraSettingsActor_TA:ProfileSettings" -> readCameraSettings(versions)
+                "TAGame.PRI_TA:CameraSettings" -> readCameraSettings(versions)
                 "Engine.PlayerReplicationInfo:UniqueId" -> readUniqueId(versions)
                 "TAGame.PRI_TA:ClientLoadoutsOnline" -> readLoadoutsOnline(versions, objectReferences)
                 "TAGame.PRI_TA:ClientLoadouts" -> readLoadouts()
+                "TAGame.PRI_TA:ClientLoadoutOnline" -> readClientLoadoutOnline(versions, objectReferences)
                 "TAGame.RBActor_TA:ReplicatedRBState" -> readRigidBodyState(versions)
                 "TAGame.Car_TA:TeamPaint" -> readTeamPaint()
                 "ProjectX.GRI_X:Reservations" -> readReservation(versions)
@@ -69,7 +78,14 @@ data class UpdatedReplication(
                 "TAGame.CarComponent_Dodge_TA:DodgeTorque" -> readVector(versions)
                 "TAGame.GameEvent_Soccar_TA:ReplicatedStatEvent" -> readStatEvent()
                 "TAGame.Car_TA:ReplicatedDemolish" -> readDemolish(versions)
+                "TAGame.Ball_TA:ReplicatedExplosionData" -> readExplosion(versions)
                 "TAGame.Ball_TA:ReplicatedExplosionDataExtended" -> readExtendedExplosion(versions)
+                "TAGame.PRI_TA:PartyLeader" -> readPartyLeader(versions)
+                "TAGame.PRI_TA:ClientLoadout" -> readLoadout()
+                "TAGame.PRI_TA:PrimaryTitle" -> readTitle()
+                "TAGame.PRI_TA:SecondaryTitle" -> readTitle()
+                "TAGame.GameEvent_Soccar_TA:ReplicatedMusicStinger" -> readMusicStinger()
+                "TAGame.RBActor_TA:WeldedInfo" -> readWeldedInfo(versions)
 
                 "Engine.GameReplicationInfo:ServerName" -> getFixedLengthString()
                 "Engine.PlayerReplicationInfo:PlayerName" -> getFixedLengthString()
@@ -106,6 +122,7 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:BotProductName" -> getUInt()
                 "TAGame.GameEvent_TA:ReplicatedRoundCountDownNumber" -> getUInt()
                 "TAGame.GameEvent_Soccar_TA:SeriesLength" -> getUInt()
+                "TAGame.PRI_TA:SpectatorShortcut" -> getUInt()
 
                 "ProjectX.GRI_X:ReplicatedGameMutatorIndex" -> getInt()
                 "TAGame.PRI_TA:TimeTillItem" -> getInt()
@@ -125,6 +142,7 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:ReplicatedWorstNetQualityBeyondLatency" -> getUByte()
                 "TAGame.GameEvent_Soccar_TA:ReplicatedServerPerformanceState" -> getUByte()
                 "TAGame.CarComponent_TA:ReplicatedActive" -> getUByte()
+                "TAGame.GameEvent_TA:ReplicatedStateIndex" -> getUByte()
 
                 "Engine.Actor:bCollideWorld" -> getBoolean()
                 "Engine.PlayerReplicationInfo:bReadyToPlay" -> getBoolean()
@@ -186,6 +204,9 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:SteeringSensitivity" -> getFloat()
 
                 "ProjectX.GRI_X:GameServerID" -> getLong()
+
+                "TAGame.PRI_TA:ClubID" -> getInt64()
+                "TAGame.Team_TA:ClubID" -> getInt64()
 
                 else -> throw UnknownPropertyException("Unknown property name '$propertyName'")
             }

@@ -13,6 +13,7 @@ data class ClassAttributeMap (
             className.contains("CrowdActor_TA") -> "TAGame.CrowdActor_TA"
             className.contains("CrowdManager_TA") -> "TAGame.CrowdManager_TA"
             className.contains("BreakOutActor_Platform_TA") -> "TAGame.BreakOutActor_Platform_TA"
+            className.contains("InMapScoreboard_TA") -> "TAGame.InMapScoreboard_TA"
             else -> className
         }
         return classNetCacheByName[key]

@@ -5,14 +5,14 @@ import com.x7ff.parser.replay.ObjectReference
 import com.x7ff.parser.replay.Versions
 import com.x7ff.parser.replay.attribute.ProductAttribute.Companion.readProductAttribute
 
-data class LoadoutOnlineAttribute(
+data class ClientLoadoutOnlineAttribute(
     val productAttributes: List<List<ProductAttribute>>
 ) {
     companion object {
-        fun BitBuffer.readLoadoutOnline(
+        fun BitBuffer.readClientLoadoutOnline(
             versions: Versions,
             objectReferences: List<ObjectReference>
-        ): LoadoutOnlineAttribute {
+        ): ClientLoadoutOnlineAttribute {
             val productAttributeLists = mutableListOf<List<ProductAttribute>>()
             val listCount = getByte()
 
@@ -25,7 +25,7 @@ data class LoadoutOnlineAttribute(
                 }
                 productAttributeLists.add(productAttributes)
             }
-            return LoadoutOnlineAttribute(productAttributeLists)
+            return ClientLoadoutOnlineAttribute(productAttributeLists)
         }
     }
 }

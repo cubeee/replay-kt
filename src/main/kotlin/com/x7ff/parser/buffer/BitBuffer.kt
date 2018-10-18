@@ -307,6 +307,7 @@ class BitBuffer(
     fun getIntMax(max: Int): Int = getBitsMax(max).toInt()
     fun getUIntMax(max: Int): Long = getIntMax(max).toUnsigned()
     fun getUIntFromBits(numBits: Int): Long = getIntFromBits(numBits).toUnsigned()
+    fun getInt64(): Long = getUInt() + (getUInt() shl 32)
 
     fun getFloat(): Float = java.lang.Float.intBitsToFloat(getInt())
 
