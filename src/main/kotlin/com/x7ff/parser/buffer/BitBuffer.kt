@@ -215,11 +215,11 @@ class BitBuffer(
     }
 
     /** Copy of current byte in the source buffer */
-    private var b: Byte = 0
-    private var bPos: Int = 0
+    private var current: Byte = 0
+    private var currentPos: Int = 0
     private operator fun next() {
-        b = source.get()
-        bPos = position / 8
+        current = source.get()
+        currentPos = position / 8
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -246,7 +246,7 @@ class BitBuffer(
         repeat(n) {
             val i = position++ % 8 // Bit offset in current byte
             if (i == 0) next() // Fill byte on boundary read
-            data = data.withBit(it, b[i])
+            data = data.withBit(it, current[i])
         }
         return data
     }
@@ -274,16 +274,7 @@ class BitBuffer(
         return result
     }
 
-    fun putBits(n: Int, data: Long) {
-        if (n == 0) return
-        repeat(n) {
-            val i = position++ % 8 // Bit offset in current byte
-            if (i == 0) next() // Fill byte on boundary read
-            b = b.withBit(i, data[it])
-            source.put(bPos, b)
-        }
-    }
-
+    // TODO: optimize!
     fun getBytes(length: Int): ByteArray {
         val bytes = ByteArray(length)
         for (i in 0 until length) {
