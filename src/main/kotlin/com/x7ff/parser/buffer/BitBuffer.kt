@@ -167,7 +167,6 @@ package com.x7ff.parser.buffer
 import java.io.ByteArrayOutputStream
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.nio.charset.Charset
 
 /**
@@ -206,20 +205,18 @@ class BitBuffer(
         }
     }
 
-    fun get(length: Int) = BitBuffer(getBytes(length))
-
-    fun get(offset: Int, length: Int): BitBuffer {
+    fun getBytesBulk(length: Int): BitBuffer {
         val buffer = ByteArray(length)
-        get(buffer, offset, length)
+        source[buffer, 0, length]
+        position += length * 8
+        source.position(position / 8)
         return BitBuffer(buffer)
     }
 
     /** Copy of current byte in the source buffer */
     private var current: Byte = 0
-    private var currentPos: Int = 0
     private operator fun next() {
         current = source.get()
-        currentPos = position / 8
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -366,41 +363,12 @@ class BitBuffer(
     fun limit(): Int = capacityBits / 8
 
     /**
-     * Does nothing.
-     */
-    fun order(@Suppress("UNUSED_PARAMETER") bo: ByteOrder): Unit = Unit
-
-    /**
-     * Sets the position.
-     *
-     * @param newPosition the new position
-     */
-    fun position(newPosition: Int): Unit = position(newPosition, 0)
-
-    /**
-     * Sets the position.
-     *
-     * @param newPosition the byte offset
-     * @param bits        the bit offset
-     */
-    fun position(newPosition: Int, bits: Int) {
-        source.position(newPosition)
-        position = newPosition * 8 // Set byte position
-        getBits(bits) // Read extra limit manually
-    }
-
-    fun positionBits(newPosition: Int) {
-        source.position(newPosition / 8)
-        position = newPosition
-    }
-
-    /**
      * @return the position in bytes
      */
     fun position(): Int = position / 8
 
     /**
-     * @return the position in limit
+     * @return the position in bits
      */
     fun positionBits(): Int = position
 }
