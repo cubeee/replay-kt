@@ -205,7 +205,10 @@ class BitBuffer(
         }
     }
 
-    fun getBytesBulk(length: Int): BitBuffer {
+    /**
+     * Reads bytes from current byte position, ignores bits and bit offset
+     */
+    fun getFullBytes(length: Int): BitBuffer {
         val buffer = ByteArray(length)
         source[buffer, 0, length]
         position += length * 8

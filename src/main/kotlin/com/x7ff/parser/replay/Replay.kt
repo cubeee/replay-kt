@@ -1,6 +1,7 @@
 package com.x7ff.parser.replay
 
 import com.x7ff.parser.buffer.BitBuffer
+import com.x7ff.parser.executeAndMeasureTimeNanos
 import com.x7ff.parser.replay.ClassMapping.Companion.readClassMappings
 import com.x7ff.parser.replay.ClassNetCache.Companion.calculateMaxPropertyIds
 import com.x7ff.parser.replay.ClassNetCache.Companion.fixClassParents
@@ -17,7 +18,6 @@ import com.x7ff.parser.replay.stream.Frame
 import com.x7ff.parser.replay.stream.Frame.Companion.readFrame
 import com.x7ff.parser.replay.stream.SpawnedReplication
 import java.io.File
-import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -57,27 +57,12 @@ data class Replay(
             }
 
             val bytes = Files.readAllBytes(path)
-            val byteBuffer = ByteBuffer.wrap(bytes)
-            val buffer = BitBuffer(byteBuffer)
-
-            val headerLength = buffer.getUInt().toInt()
-            val headerCrc = buffer.getUInt() // TODO: verify
-            val headerBuffer = buffer.get(headerLength)
-            val header = headerBuffer.readHeader()
-            if (headerBuffer.hasRemainingBits()) {
-                throw RuntimeException("Bits remaining in header buffer: ${headerBuffer.remainingBits()}")
-            }
-
-            val replayLength = buffer.getUInt().toInt()
-            val replayCrc = buffer.getInt() // TODO: verify
-            val replayBuffer = buffer.get(replayLength)
-
+            val buffer = BitBuffer(bytes)
+            val header = buffer.parseHeader()
+            val replayBuffer = buffer.readReplayBuffer()
             val levels = replayBuffer.readLevels()
             val keyFrames = replayBuffer.readKeyFrames()
-
-            val networkStreamLength = replayBuffer.getUInt().toInt()
-            val networkStream = replayBuffer.get(networkStreamLength)
-
+            val networkStream = replayBuffer.readNetworkStreamBuffer()
             val messages = replayBuffer.readMessages()
             val marks = replayBuffer.readMarks()
             val packages = replayBuffer.readPackages()
@@ -103,7 +88,9 @@ data class Replay(
                 objectReferences = objectReferences
             )
 
-            val frames = parseFrames(networkStream, header, objectReferences, classAttributeMap)
+            val (frames, _/*elapsed*/) = executeAndMeasureTimeNanos {
+                parseFrames(networkStream, header, objectReferences, classAttributeMap)
+            }
 
             return Replay(
                 header = header,
@@ -118,6 +105,28 @@ data class Replay(
                 caches = caches,
                 frames = frames
             )
+        }
+
+        private fun BitBuffer.parseHeader(): Header {
+            val headerLength = getUInt().toInt()
+            val headerCrc = getUInt() // TODO: verify
+            val headerBuffer = getFullBytes(headerLength)
+            val header = headerBuffer.readHeader()
+            if (headerBuffer.hasRemainingBits()) {
+                throw RuntimeException("Bits remaining in header buffer: ${headerBuffer.remainingBits()}")
+            }
+            return header
+        }
+
+        private fun BitBuffer.readReplayBuffer(): BitBuffer {
+            val replayLength = getUInt().toInt()
+            val replayCrc = getInt() // TODO: verify
+            return getFullBytes(replayLength)
+        }
+
+        private fun BitBuffer.readNetworkStreamBuffer(): BitBuffer {
+            val networkStreamLength = getUInt().toInt()
+            return getFullBytes(networkStreamLength)
         }
 
         private fun parseFrames(
