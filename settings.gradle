@@ -1,2 +1,4 @@
 rootProject.name = 'replay-kt'
 
+include 'lib'
+include 'tools'

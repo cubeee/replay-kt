@@ -1,5 +1,7 @@
 .*
 !.gitignore
+*.sqlite
+*.jfr
 
 out/
 build/

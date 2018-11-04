@@ -2,6 +2,7 @@ package com.x7ff.parser.replay
 
 import com.x7ff.parser.buffer.BitBuffer
 import com.x7ff.parser.executeAndMeasureTimeNanos
+import com.x7ff.parser.readBytes
 import com.x7ff.parser.replay.ClassMapping.Companion.readClassMappings
 import com.x7ff.parser.replay.ClassNetCache.Companion.calculateMaxPropertyIds
 import com.x7ff.parser.replay.ClassNetCache.Companion.fixClassParents
@@ -56,7 +57,7 @@ data class Replay(
                 return null
             }
 
-            val bytes = Files.readAllBytes(path)
+            val bytes = path.readBytes()
             val buffer = BitBuffer(bytes)
             val header = buffer.parseHeader()
             val replayBuffer = buffer.readReplayBuffer()

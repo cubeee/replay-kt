@@ -1,0 +1,13 @@
+dependencies {
+    compile project(':lib')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "org.jetbrains.exposed:exposed:0.11.2"
+    compile "org.xerial:sqlite-jdbc:3.25.2"
+}
+
+jar {
+    if (project.hasProperty("jarName")) {
+        archiveName = project.findProperty("jarName")
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
