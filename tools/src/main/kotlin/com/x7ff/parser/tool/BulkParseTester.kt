@@ -25,8 +25,8 @@ object WorkingFiles : Table() {
 class BulkParseTester(
     private val path: File,
     private val batchWorkers: Int = DEFAULT_WORKER_COUNT,
-    private val reparseWorking: Boolean = false,
-    private val failFast: Boolean = false
+    private val failFast: Boolean = false,
+    private val reparseWorking: Boolean = false
 ) {
 
     private var brokenReplays = 0
@@ -205,7 +205,10 @@ class BulkParseTester(
 }
 
 fun main(args: Array<String>) {
-    if (args.size != 1) {
+    val failFast = args.contains("failFast")
+    val reparseWorking = args.contains("reparseWorking")
+
+    if (args.isEmpty()) {
         println("Usage: BulkParserTest [path]\n\nPath can be a directory or a single file")
         exitProcess(1)
     }
@@ -217,6 +220,9 @@ fun main(args: Array<String>) {
     }
     println(path)
 
-    val tester = BulkParseTester(path)
+    val tester = BulkParseTester(
+        path = path,
+        reparseWorking = reparseWorking,
+        failFast = failFast)
     tester.testReplays()
 }
