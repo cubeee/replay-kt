@@ -60,6 +60,7 @@ fun String.rawObjectClass(): String = when(this) {
     "Archetypes.GameEvent.GameEvent_HockeyPrivate" -> "TAGame.GameEvent_SoccarPrivate_TA"
     "Archetypes.GameEvent.GameEvent_HockeySplitscreen" -> "TAGame.GameEvent_SoccarSplitscreen_TA"
     "Archetypes.GameEvent.GameEvent_Items" -> "TAGame.GameEvent_Soccar_TA"
+    "Archetypes.GameEvent.GameEvent_SoccarLan" -> "TAGame.GameEvent_Soccar_TA"
     "Archetypes.GameEvent.GameEvent_Season:CarArchetype" -> "TAGame.Car_TA"
     "Archetypes.GameEvent.GameEvent_Season" -> "TAGame.GameEvent_Season_TA"
     "Archetypes.GameEvent.GameEvent_Soccar" -> "TAGame.GameEvent_Soccar_TA"

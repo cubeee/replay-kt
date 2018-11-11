@@ -130,15 +130,16 @@ data class Replay(
             return getFullBytes(networkStreamLength)
         }
 
-        private fun parseFrames(
+        fun parseFrames(
             networkStream: BitBuffer,
             header: Header,
             objectReferences: List<ObjectReference>,
-            classAttributeMap: ClassAttributeMap
+            classAttributeMap: ClassAttributeMap,
+            properties: PropertyList
         ): List<Frame> {
             val engineVersion = header.engineVersion
             val licenseeVersion = header.licenseeVersion
-            val patchVersion = header.patchVersion
+            val patchVersion = getPatchVersion(header.patchVersion, properties)
             val numFrames: Int = PropertyKey.NumFrames from header.properties
             val maxChannels: Int = PropertyKey.MaxChannels from header.properties
             val versions = Versions(engineVersion, licenseeVersion, patchVersion)
@@ -153,6 +154,19 @@ data class Replay(
             } while(frames.size < numFrames)
 
             return frames.toList()
+        }
+
+        private fun getPatchVersion(headerPatchVersion: Long, properties: PropertyList): Long {
+            return when (headerPatchVersion) {
+                0L -> {
+                    val matchType = properties.property<String>("MatchType")
+                    when (matchType) {
+                        "Lan" -> -1
+                        else -> 0
+                    }
+                }
+                else -> headerPatchVersion
+            }
         }
 
     }
