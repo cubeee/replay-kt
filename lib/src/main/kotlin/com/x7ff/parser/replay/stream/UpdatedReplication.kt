@@ -4,7 +4,6 @@ import com.x7ff.parser.buffer.BitBuffer
 import com.x7ff.parser.exception.UnknownPropertyException
 import com.x7ff.parser.replay.ClassNetCacheProperty
 import com.x7ff.parser.replay.ObjectReference
-import com.x7ff.parser.replay.Replay
 import com.x7ff.parser.replay.Vector3d.Companion.readVector
 import com.x7ff.parser.replay.Versions
 import com.x7ff.parser.replay.attribute.AppliedDamageAttribute.Companion.readAppliedDamage

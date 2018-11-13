@@ -324,6 +324,9 @@ class BitBuffer(
 
     fun getFixedLengthString(): String {
         val strLength = getInt()
+        if (strLength == 0) {
+            return ""
+        }
 
         val win1252StringConverter: ((ByteArray, Int) -> String)
                 = { bytes, len -> String(bytes, 0, len - 1, Charset.forName("Windows-1252")) }
