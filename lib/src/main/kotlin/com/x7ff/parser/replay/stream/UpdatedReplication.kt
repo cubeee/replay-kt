@@ -141,6 +141,7 @@ data class UpdatedReplication(
                 "TAGame.GameEvent_TA:ReplicatedRoundCountDownNumber" -> getUInt()
                 "TAGame.GameEvent_Soccar_TA:SeriesLength" -> getUInt()
                 "TAGame.PRI_TA:SpectatorShortcut" -> getUInt()
+                "Engine.Pawn:HealthMax" -> getUInt()
 
                 "ProjectX.GRI_X:ReplicatedGameMutatorIndex" -> getInt()
                 "TAGame.PRI_TA:TimeTillItem" -> getInt()
@@ -203,6 +204,8 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:PlayerHistoryValid" -> getBoolean()
                 "TAGame.GameEvent_Soccar_TA:bMatchEnded" -> getBoolean()
                 "TAGame.GameEvent_Soccar_TA:bUnlimitedTime" -> getBoolean()
+                "Engine.Actor:bTearOff" -> getBoolean()
+                "TAGame.Vehicle_TA:bPodiumMode" -> getBoolean()
 
                 "TAGame.CarComponent_FlipCar_TA:FlipCarTime" -> getFloat()
                 "TAGame.Ball_TA:ReplicatedBallScale" -> getFloat()

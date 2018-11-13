@@ -90,7 +90,7 @@ data class Replay(
             )
 
             val (frames, _/*elapsed*/) = executeAndMeasureTimeNanos {
-                parseFrames(networkStream, header, objectReferences, classAttributeMap)
+                parseFrames(networkStream, header, objectReferences, classAttributeMap, header.properties)
             }
 
             return Replay(

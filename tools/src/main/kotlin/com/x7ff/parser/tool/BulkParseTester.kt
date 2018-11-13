@@ -1,9 +1,8 @@
 package com.x7ff.parser.tool
 
 import com.x7ff.parser.executeAndMeasureTimeNanos
-import com.x7ff.parser.replay.Property
 import com.x7ff.parser.replay.Replay
-import com.x7ff.parser.replay.property
+import com.x7ff.parser.replay.intPropertyOrZero
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
