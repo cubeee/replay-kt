@@ -322,8 +322,7 @@ class BitBuffer(
         return baos.toByteArray()
     }
 
-    fun getFixedLengthString(): String {
-        val strLength = getInt()
+    fun getFixedLengthString(strLength: Int = getInt()): String {
         if (strLength == 0) {
             return ""
         }

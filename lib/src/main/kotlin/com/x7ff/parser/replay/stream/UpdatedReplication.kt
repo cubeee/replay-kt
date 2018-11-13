@@ -21,6 +21,7 @@ import com.x7ff.parser.replay.attribute.MusicStingerAttribute.Companion.readMusi
 import com.x7ff.parser.replay.attribute.PartyLeaderAttribute.Companion.readPartyLeader
 import com.x7ff.parser.replay.attribute.PickupAttribute.Companion.readPickupData
 import com.x7ff.parser.replay.attribute.PrivateMatchSettingsAttribute.Companion.readPrivateMatchSettings
+import com.x7ff.parser.replay.attribute.RepStatTitlesAttribute.Companion.readRepStatTitles
 import com.x7ff.parser.replay.attribute.ReservationAttribute.Companion.readReservation
 import com.x7ff.parser.replay.attribute.RigidBodyStateAttribute.Companion.readRigidBodyState
 import com.x7ff.parser.replay.attribute.StatEventAttribute.Companion.readStatEvent
@@ -102,6 +103,7 @@ data class UpdatedReplication(
                 "TAGame.GameEvent_TA:GameMode" -> readGameMode(versions)
                 "TAGame.BreakOutActor_Platform_TA:DamageState" -> readDamageState(versions)
                 "TAGame.Ball_Breakout_TA:AppliedDamage" -> readAppliedDamage(versions)
+                "TAGame.PRI_TA:RepStatTitles" -> readRepStatTitles()
 
                 "Engine.GameReplicationInfo:ServerName" -> getFixedLengthString()
                 "Engine.PlayerReplicationInfo:PlayerName" -> getFixedLengthString()
@@ -226,9 +228,18 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:ClubID" -> getInt64()
                 "TAGame.Team_TA:ClubID" -> getInt64()
 
-                else -> throw UnknownPropertyException("Unknown property name '$propertyName'")
-            }
+                "TAGame.PRI_TA:PlayerHistoryKey" -> getBits(14).toInt()
+                "TAGame.PRI_TA:SkillTier" -> getBits(9)
 
+                else -> {
+                    println("Next 2048 bits: ")
+                    for (i in 0..2048) {
+                        print(getBits(1))
+                    }
+                    println()
+                    throw UnknownPropertyException("Unknown property name '$propertyName'")
+                }
+            }
             return UpdatedReplication(propertyId, property, propertyName, data)
         }
 
