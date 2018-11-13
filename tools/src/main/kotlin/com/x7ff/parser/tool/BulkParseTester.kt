@@ -138,9 +138,10 @@ class BulkParseTester(
 
             replay?.let {
                 replay.header.run {
-                    val goals: List<Property> = properties.property("Goals")
+                    val blueGoals: Int = properties.intPropertyOrZero("Team0Score")
+                    val orangeGoals: Int = properties.intPropertyOrZero("Team1Score")
 
-                    if (goals.isEmpty()) {
+                    if (blueGoals == 0 && orangeGoals == 0) {
                         zeroGoalReplays++
                     } else {
                         testedWorkingFiles.add(file.nameWithoutExtension)

@@ -4,18 +4,24 @@ import com.x7ff.parser.buffer.BitBuffer
 import com.x7ff.parser.exception.UnknownPropertyException
 import com.x7ff.parser.replay.ClassNetCacheProperty
 import com.x7ff.parser.replay.ObjectReference
+import com.x7ff.parser.replay.Replay
 import com.x7ff.parser.replay.Vector3d.Companion.readVector
 import com.x7ff.parser.replay.Versions
+import com.x7ff.parser.replay.attribute.AppliedDamageAttribute.Companion.readAppliedDamage
 import com.x7ff.parser.replay.attribute.ClientLoadoutOnlineAttribute.Companion.readClientLoadoutOnline
+import com.x7ff.parser.replay.attribute.ClubColorsAttribute.Companion.readClubColors
+import com.x7ff.parser.replay.attribute.DamageStateAttribute.Companion.readDamageState
 import com.x7ff.parser.replay.attribute.DemolishAttribute.Companion.readDemolish
 import com.x7ff.parser.replay.attribute.ExplosionAttribute.Companion.readExplosion
 import com.x7ff.parser.replay.attribute.ExtendedExplosionAttribute.Companion.readExtendedExplosion
+import com.x7ff.parser.replay.attribute.GameModeAttribute.Companion.readGameMode
 import com.x7ff.parser.replay.attribute.LoadoutAttribute.Companion.readLoadout
 import com.x7ff.parser.replay.attribute.LoadoutsAttribute.Companion.readLoadouts
 import com.x7ff.parser.replay.attribute.LoadoutsOnlineAttribute.Companion.readLoadoutsOnline
 import com.x7ff.parser.replay.attribute.MusicStingerAttribute.Companion.readMusicStinger
 import com.x7ff.parser.replay.attribute.PartyLeaderAttribute.Companion.readPartyLeader
 import com.x7ff.parser.replay.attribute.PickupAttribute.Companion.readPickupData
+import com.x7ff.parser.replay.attribute.PrivateMatchSettingsAttribute.Companion.readPrivateMatchSettings
 import com.x7ff.parser.replay.attribute.ReservationAttribute.Companion.readReservation
 import com.x7ff.parser.replay.attribute.RigidBodyStateAttribute.Companion.readRigidBodyState
 import com.x7ff.parser.replay.attribute.StatEventAttribute.Companion.readStatEvent
@@ -58,6 +64,10 @@ data class UpdatedReplication(
                 "TAGame.Car_TA:AttachedPickup" -> readActiveActor()
                 "TAGame.SpecialPickup_Targeted_TA:Targeted" -> readActiveActor()
                 "TAGame.CameraSettingsActor_TA:PRI" -> readActiveActor()
+                "TAGame.Team_TA:LogoData" -> readActiveActor()
+                "TAGame.GameEvent_Soccar_TA:MVP" -> readActiveActor()
+                "TAGame.GameEvent_Soccar_TA:MatchWinner" -> readActiveActor()
+                "TAGame.GameEvent_Soccar_TA:GameWinner" -> readActiveActor()
 
                 "TAGame.CrowdManager_TA:ReplicatedGlobalOneShotSound" -> readObjectTarget()
                 "TAGame.CrowdActor_TA:ReplicatedOneShotSound" -> readObjectTarget()
@@ -75,6 +85,7 @@ data class UpdatedReplication(
                 "TAGame.Car_TA:TeamPaint" -> readTeamPaint()
                 "ProjectX.GRI_X:Reservations" -> readReservation(versions)
                 "TAGame.VehiclePickup_TA:ReplicatedPickupData" -> readPickupData()
+                "Engine.Actor:Location" -> readVector(versions)
                 "TAGame.CarComponent_Dodge_TA:DodgeTorque" -> readVector(versions)
                 "TAGame.GameEvent_Soccar_TA:ReplicatedStatEvent" -> readStatEvent()
                 "TAGame.Car_TA:ReplicatedDemolish" -> readDemolish(versions)
@@ -86,6 +97,12 @@ data class UpdatedReplication(
                 "TAGame.PRI_TA:SecondaryTitle" -> readTitle()
                 "TAGame.GameEvent_Soccar_TA:ReplicatedMusicStinger" -> readMusicStinger()
                 "TAGame.RBActor_TA:WeldedInfo" -> readWeldedInfo(versions)
+                "TAGame.Team_TA:ClubColors" -> readClubColors()
+                "TAGame.Car_TA:ClubColors" -> readClubColors()
+                "TAGame.GameEvent_SoccarPrivate_TA:MatchSettings" -> readPrivateMatchSettings()
+                "TAGame.GameEvent_TA:GameMode" -> readGameMode(versions)
+                "TAGame.BreakOutActor_Platform_TA:DamageState" -> readDamageState(versions)
+                "TAGame.Ball_Breakout_TA:AppliedDamage" -> readAppliedDamage(versions)
 
                 "Engine.GameReplicationInfo:ServerName" -> getFixedLengthString()
                 "Engine.PlayerReplicationInfo:PlayerName" -> getFixedLengthString()
@@ -183,6 +200,7 @@ data class UpdatedReplication(
                 "TAGame.VehiclePickup_TA:bNoPickup" -> getBoolean()
                 "TAGame.CarComponent_Boost_TA:bNoBoost" -> getBoolean()
                 "TAGame.PRI_TA:PlayerHistoryValid" -> getBoolean()
+                "TAGame.GameEvent_Soccar_TA:bMatchEnded" -> getBoolean()
                 "TAGame.GameEvent_Soccar_TA:bUnlimitedTime" -> getBoolean()
 
                 "TAGame.CarComponent_FlipCar_TA:FlipCarTime" -> getFloat()
@@ -202,6 +220,7 @@ data class UpdatedReplication(
                 "TAGame.Car_TA:AddedCarForceMultiplier" -> getFloat()
                 "TAGame.Car_TA:AddedBallForceMultiplier" -> getFloat()
                 "TAGame.PRI_TA:SteeringSensitivity" -> getFloat()
+                "TAGame.Car_TA:ReplicatedCarScale" -> getFloat()
 
                 "ProjectX.GRI_X:GameServerID" -> getLong()
 

@@ -140,8 +140,8 @@ data class Replay(
             val engineVersion = header.engineVersion
             val licenseeVersion = header.licenseeVersion
             val patchVersion = getPatchVersion(header.patchVersion, properties)
-            val numFrames: Int = PropertyKey.NumFrames from header.properties
-            val maxChannels: Int = PropertyKey.MaxChannels from header.properties
+            val numFrames: Int = PropertyKey.NumFrames intOrZeroFrom header.properties
+            val maxChannels: Int = PropertyKey.MaxChannels intOrZeroFrom header.properties
             val versions = Versions(engineVersion, licenseeVersion, patchVersion)
 
             val existingReplications = mutableMapOf<Long, SpawnedReplication>()
