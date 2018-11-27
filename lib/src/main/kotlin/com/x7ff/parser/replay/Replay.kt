@@ -52,12 +52,27 @@ data class Replay(
     }
 
     companion object {
-        fun ByteBuffer.parseReplay() = parse(this)
+        fun File.parseReplayHeader() = parseHeader(this)
+        fun Path.parseReplayHeader() = parseHeader(this)
+        fun ByteBuffer.parseReplayHeader() = parseHeader(this)
+
+        fun parseHeader(path: File) = parse(path.toPath())
+        fun parseHeader(buffer: ByteBuffer) = parseHeader(BitBuffer(buffer))
+        fun parseHeader(buffer: BitBuffer) = buffer.parseReplayHeader()
+        fun parseHeader(path: Path): Header? {
+            if (Files.isDirectory(path)) {
+                return null
+            }
+            return parseHeader(path.readBytes())
+        }
+
         fun File.parseReplay() = parse(this)
         fun Path.parseReplay() = parse(this)
+        fun BitBuffer.parseReplay() = parse(this)
+        fun ByteBuffer.parseReplay() = parse(this)
 
         fun parse(path: File): Replay? = parse(path.toPath())
-
+        fun parse(bytes: ByteBuffer) = parse(BitBuffer(bytes))
         fun parse(path: Path): Replay? {
             if (Files.isDirectory(path)) {
                 return null
@@ -65,9 +80,8 @@ data class Replay(
             return parse(path.readBytes())
         }
 
-        fun parse(bytes: ByteBuffer): Replay? {
-            val buffer = BitBuffer(bytes)
-            val header = buffer.parseHeader()
+        fun parse(buffer: BitBuffer): Replay? {
+            val header = buffer.parseReplayHeader()
             val replayBuffer = buffer.readReplayBuffer()
             val levels = replayBuffer.readLevels()
             val keyFrames = replayBuffer.readKeyFrames()
@@ -116,7 +130,7 @@ data class Replay(
             )
         }
 
-        private fun BitBuffer.parseHeader(): Header {
+        private fun BitBuffer.parseReplayHeader(): Header {
             val headerLength = getUInt().toInt()
             val headerCrc = getUInt() // TODO: verify
             val headerBuffer = getFullBytes(headerLength)
@@ -127,7 +141,7 @@ data class Replay(
             return header
         }
 
-        private fun BitBuffer.readReplayBuffer(): BitBuffer {
+        fun BitBuffer.readReplayBuffer(): BitBuffer {
             val replayLength = getUInt().toInt()
             val replayCrc = getInt() // TODO: verify
             return getFullBytes(replayLength)
