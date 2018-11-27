@@ -1,9 +1,9 @@
-package com.x7ff.parser.replay.stream
+package com.x7ff.parser.replay.attribute
 
 import com.x7ff.parser.buffer.BitBuffer
 import com.x7ff.parser.replay.Versions
 
-data class CameraSettings(
+data class CameraSettingsAttribute(
     val fieldOfView: Float,
     val height: Float,
     val pitch: Float,
@@ -13,7 +13,7 @@ data class CameraSettings(
     val transitionSpeed: Float
 ) {
     companion object {
-        fun BitBuffer.readCameraSettings(versions: Versions): CameraSettings {
+        fun BitBuffer.readCameraSettings(versions: Versions): CameraSettingsAttribute {
             val fieldOfView = getFloat()
             val height = getFloat()
             val pitch = getFloat()
@@ -24,7 +24,15 @@ data class CameraSettings(
                 versions.engineVersion >= 868 && versions.licenseeVersion >= 20 -> getFloat()
                 else -> 1.0f
             }
-            return CameraSettings(fieldOfView, height, pitch, distance, stiffness, swivelSpeed, transitionSpeed)
+            return CameraSettingsAttribute(
+                fieldOfView,
+                height,
+                pitch,
+                distance,
+                stiffness,
+                swivelSpeed,
+                transitionSpeed
+            )
         }
     }
 }

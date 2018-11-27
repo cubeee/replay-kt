@@ -1,16 +1,16 @@
-package com.x7ff.parser.replay.stream
+package com.x7ff.parser.replay.attribute
 
 import com.x7ff.parser.buffer.BitBuffer
 
-data class ObjectTarget(
+data class ObjectTargetAttribute(
     val flag: Boolean,
     val objectIndex: Int
 ) {
     companion object {
-        fun BitBuffer.readObjectTarget(): ObjectTarget {
+        fun BitBuffer.readObjectTarget(): ObjectTargetAttribute {
             val flag = getBoolean()
             val objectIndex = getInt()
-            return ObjectTarget(flag, objectIndex)
+            return ObjectTargetAttribute(flag, objectIndex)
         }
     }
 }

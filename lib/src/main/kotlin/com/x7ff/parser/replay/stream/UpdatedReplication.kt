@@ -7,6 +7,7 @@ import com.x7ff.parser.replay.ObjectReference
 import com.x7ff.parser.replay.Vector3d.Companion.readVector
 import com.x7ff.parser.replay.Versions
 import com.x7ff.parser.replay.attribute.AppliedDamageAttribute.Companion.readAppliedDamage
+import com.x7ff.parser.replay.attribute.CameraSettingsAttribute.Companion.readCameraSettings
 import com.x7ff.parser.replay.attribute.ClientLoadoutOnlineAttribute.Companion.readClientLoadoutOnline
 import com.x7ff.parser.replay.attribute.ClubColorsAttribute.Companion.readClubColors
 import com.x7ff.parser.replay.attribute.DamageStateAttribute.Companion.readDamageState
@@ -18,6 +19,7 @@ import com.x7ff.parser.replay.attribute.LoadoutAttribute.Companion.readLoadout
 import com.x7ff.parser.replay.attribute.LoadoutsAttribute.Companion.readLoadouts
 import com.x7ff.parser.replay.attribute.LoadoutsOnlineAttribute.Companion.readLoadoutsOnline
 import com.x7ff.parser.replay.attribute.MusicStingerAttribute.Companion.readMusicStinger
+import com.x7ff.parser.replay.attribute.ObjectTargetAttribute.Companion.readObjectTarget
 import com.x7ff.parser.replay.attribute.PartyLeaderAttribute.Companion.readPartyLeader
 import com.x7ff.parser.replay.attribute.PickupAttribute.Companion.readPickupData
 import com.x7ff.parser.replay.attribute.PrivateMatchSettingsAttribute.Companion.readPrivateMatchSettings
@@ -30,8 +32,6 @@ import com.x7ff.parser.replay.attribute.TitleAttribute.Companion.readTitle
 import com.x7ff.parser.replay.attribute.UniqueIdAttribute.Companion.readUniqueId
 import com.x7ff.parser.replay.attribute.WeldedInfoAttribute.Companion.readWeldedInfo
 import com.x7ff.parser.replay.stream.ActiveActor.Companion.readActiveActor
-import com.x7ff.parser.replay.stream.CameraSettings.Companion.readCameraSettings
-import com.x7ff.parser.replay.stream.ObjectTarget.Companion.readObjectTarget
 
 data class UpdatedReplication(
     val propertyId: Long,
