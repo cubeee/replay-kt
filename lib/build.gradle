@@ -10,5 +10,5 @@ jar {
     if (project.hasProperty("jarName")) {
         archiveName = project.findProperty("jarName")
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    baseName = "replay-kt"
 }

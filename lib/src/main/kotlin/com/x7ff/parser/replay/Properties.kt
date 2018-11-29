@@ -26,7 +26,7 @@ object Properties {
 typealias PropertyList = List<Property>
 
 inline fun <reified T> PropertyList.property(name: String): T = first { prop -> prop.name == name }.value as T
-inline fun PropertyList.intPropertyOrZero(name: String): Int = firstOrNull { prop -> prop.name == name }?.value as Int? ?: 0
+fun PropertyList.intPropertyOrZero(name: String): Int = firstOrNull { prop -> prop.name == name }?.value as Int? ?: 0
 inline fun <reified T> PropertyList.propertyOrNull(name: String): T? = firstOrNull { prop -> prop.name == name }?.value as T?
 inline fun <reified T> PropertyList.property(name: PropertyKey): T = property(name.id)
 inline infix fun <reified T> PropertyKey.from(properties: PropertyList): T = properties.property(this)

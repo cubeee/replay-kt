@@ -1,8 +1,10 @@
 .*
-!.gitignore
 *.sqlite
 *.jfr
 
 out/
 build/
 test_data/
+
+!.gitignore
+!.travis.yml
