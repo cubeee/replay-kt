@@ -54,9 +54,11 @@ data class Replay(
     companion object {
         fun File.parseReplayHeader() = parseHeader(this)
         fun Path.parseReplayHeader() = parseHeader(this)
+        fun ByteArray.parseReplayHeader() = parseHeader(this)
         fun ByteBuffer.parseReplayHeader() = parseHeader(this)
 
         fun parseHeader(path: File) = parse(path.toPath())
+        fun parseHeader(buffer: ByteArray) = parseHeader(BitBuffer(buffer))
         fun parseHeader(buffer: ByteBuffer) = parseHeader(BitBuffer(buffer))
         fun parseHeader(buffer: BitBuffer) = buffer.parseReplayHeader()
         fun parseHeader(path: Path): Header? {
@@ -70,8 +72,10 @@ data class Replay(
         fun Path.parseReplay() = parse(this)
         fun BitBuffer.parseReplay() = parse(this)
         fun ByteBuffer.parseReplay() = parse(this)
+        fun ByteArray.parseReplay() = parse(this)
 
         fun parse(path: File): Replay? = parse(path.toPath())
+        fun parse(bytes: ByteArray) = parse(BitBuffer(bytes))
         fun parse(bytes: ByteBuffer) = parse(BitBuffer(bytes))
         fun parse(path: Path): Replay? {
             if (Files.isDirectory(path)) {
