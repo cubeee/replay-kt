@@ -60,9 +60,9 @@ data class Replay(
         fun parseHeader(buffer: ByteArray) = parseHeader(BitBuffer(buffer))
         fun parseHeader(buffer: ByteBuffer) = parseHeader(BitBuffer(buffer))
         fun parseHeader(buffer: BitBuffer) = buffer.parseReplayHeader()
-        fun parseHeader(path: Path): Header? {
+        fun parseHeader(path: Path): Header {
             if (Files.isDirectory(path)) {
-                return null
+                throw IllegalArgumentException("Input path is a directory, can only parse individual files")
             }
             return parseHeader(path.readBytes())
         }
@@ -73,12 +73,12 @@ data class Replay(
         fun ByteBuffer.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
         fun ByteArray.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
 
-        fun parse(path: File, parseFrames: Boolean = true): Replay? = parse(path.toPath(), parseFrames)
+        fun parse(path: File, parseFrames: Boolean = true): Replay = parse(path.toPath(), parseFrames)
         fun parse(bytes: ByteArray, parseFrames: Boolean = true) = parse(BitBuffer(bytes), parseFrames)
         fun parse(bytes: ByteBuffer, parseFrames: Boolean = true) = parse(BitBuffer(bytes), parseFrames)
-        fun parse(path: Path, parseFrames: Boolean = true): Replay? {
+        fun parse(path: Path, parseFrames: Boolean = true): Replay {
             if (Files.isDirectory(path)) {
-                return null
+                throw IllegalArgumentException("Input path is a directory, can only parse individual files")
             }
             return parse(path.readBytes(), parseFrames)
         }
