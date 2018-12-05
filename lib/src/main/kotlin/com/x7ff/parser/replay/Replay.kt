@@ -1,7 +1,6 @@
 package com.x7ff.parser.replay
 
 import com.x7ff.parser.buffer.BitBuffer
-import com.x7ff.parser.executeAndMeasureTimeNanos
 import com.x7ff.parser.readBytes
 import com.x7ff.parser.replay.ClassMapping.Companion.readClassMappings
 import com.x7ff.parser.replay.ClassNetCache.Companion.calculateMaxPropertyIds
@@ -68,23 +67,23 @@ data class Replay(
             return parseHeader(path.readBytes())
         }
 
-        fun File.parseReplay() = parse(this)
-        fun Path.parseReplay() = parse(this)
-        fun BitBuffer.parseReplay() = parse(this)
-        fun ByteBuffer.parseReplay() = parse(this)
-        fun ByteArray.parseReplay() = parse(this)
+        fun File.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
+        fun Path.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
+        fun BitBuffer.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
+        fun ByteBuffer.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
+        fun ByteArray.parseReplay(parseFrames: Boolean = true) = parse(this, parseFrames)
 
-        fun parse(path: File): Replay? = parse(path.toPath())
-        fun parse(bytes: ByteArray) = parse(BitBuffer(bytes))
-        fun parse(bytes: ByteBuffer) = parse(BitBuffer(bytes))
-        fun parse(path: Path): Replay? {
+        fun parse(path: File, parseFrames: Boolean = true): Replay? = parse(path.toPath(), parseFrames)
+        fun parse(bytes: ByteArray, parseFrames: Boolean = true) = parse(BitBuffer(bytes), parseFrames)
+        fun parse(bytes: ByteBuffer, parseFrames: Boolean = true) = parse(BitBuffer(bytes), parseFrames)
+        fun parse(path: Path, parseFrames: Boolean = true): Replay? {
             if (Files.isDirectory(path)) {
                 return null
             }
-            return parse(path.readBytes())
+            return parse(path.readBytes(), parseFrames)
         }
 
-        fun parse(buffer: BitBuffer): Replay? {
+        fun parse(buffer: BitBuffer, parseFrames: Boolean = true): Replay {
             val header = buffer.parseReplayHeader()
             val replayBuffer = buffer.readReplayBuffer()
             val levels = replayBuffer.readLevels()
@@ -115,8 +114,9 @@ data class Replay(
                 objectReferences = objectReferences
             )
 
-            val (frames, _/*elapsed*/) = executeAndMeasureTimeNanos {
-                parseFrames(networkStream, header, objectReferences, classAttributeMap, header.properties)
+            val frames = when (parseFrames) {
+                true -> parseFrames(networkStream, header, objectReferences, classAttributeMap, header.properties)
+                else -> listOf()
             }
 
             return Replay(
