@@ -177,7 +177,7 @@ data class Replay(
                 val frame = networkStream.readFrame(
                     maxChannels, versions, existingReplications, objectReferences, classAttributeMap)
                 frames.add(frame)
-            } while(frames.size <= numFrames)
+            } while(frames.size < numFrames && networkStream.hasRemainingBits())
 
             return frames.toList()
         }
