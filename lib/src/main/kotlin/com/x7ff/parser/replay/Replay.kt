@@ -173,11 +173,11 @@ data class Replay(
             val existingReplications = mutableMapOf<Long, SpawnedReplication>()
 
             val frames = mutableListOf<Frame>()
-            do {
+            while(frames.size < numFrames && networkStream.hasRemainingBits()) {
                 val frame = networkStream.readFrame(
                     maxChannels, versions, existingReplications, objectReferences, classAttributeMap)
                 frames.add(frame)
-            } while(frames.size < numFrames && networkStream.hasRemainingBits())
+            }
 
             return frames.toList()
         }
