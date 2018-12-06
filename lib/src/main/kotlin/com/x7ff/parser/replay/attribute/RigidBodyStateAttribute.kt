@@ -19,11 +19,11 @@ data class RigidBodyStateAttribute(
         fun BitBuffer.readRigidBodyState(versions: Versions): RigidBodyStateAttribute {
             val sleeping = getBoolean()
             val position = when {
-                versions.gte(868, 22, 5) -> readFixedPointVector(versions)
+                versions >= Versions(868, 22, 5) -> readFixedPointVector(versions)
                 else -> readVector(versions)
             }
             val rotation = when {
-                versions.gte(868, 22, 7) -> readRotationQuaternion()
+                versions >= Versions(868, 22, 7) -> readRotationQuaternion()
                 else -> readRotationVector()
             }
             val (linearVelocity, angularVelocity) = when {

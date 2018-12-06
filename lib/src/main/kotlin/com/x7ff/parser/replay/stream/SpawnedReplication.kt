@@ -24,7 +24,7 @@ data class SpawnedReplication(
         ): SpawnedReplication {
             var nameIndex: Long? = null
             val name: String? = when {
-                versions.gte(868, 14, 0) -> {
+                versions >= Versions(868, 14, 0) -> {
                     nameIndex = getUInt()
                     classAttributeMap.getName(nameIndex)
                 }
