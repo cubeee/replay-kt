@@ -207,6 +207,7 @@ data class UpdatedReplication(
                 "Engine.Actor:bTearOff" -> getBoolean()
                 "TAGame.Vehicle_TA:bPodiumMode" -> getBoolean()
                 "Engine.PlayerReplicationInfo:bTimedOut" -> getBoolean()
+                "TAGame.GameEvent_Soccar_TA:bClubMatch" -> getBoolean()
 
                 "TAGame.CarComponent_FlipCar_TA:FlipCarTime" -> getFloat()
                 "TAGame.Ball_TA:ReplicatedBallScale" -> getFloat()
