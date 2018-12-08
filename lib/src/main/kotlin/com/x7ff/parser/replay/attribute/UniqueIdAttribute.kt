@@ -23,7 +23,15 @@ data class UniqueIdAttribute(
                 2 -> Platform.PS4
                 4 -> Platform.XBOX
                 6 -> Platform.SWITCH
-                else -> throw IllegalArgumentException("Unknown platform id: $platformId")
+                7 -> Platform.PSYNET
+                else -> {
+                    println("Next 2048 bits from position ${position()} (${positionBits()}): ")
+                    for (i in 0..2048) {
+                        print(getBits(1))
+                    }
+                    println()
+                    throw IllegalArgumentException("Unknown platform id: $platformId")
+                }
             }
         }
 
@@ -40,6 +48,7 @@ data class UniqueIdAttribute(
                 }
                 Platform.XBOX -> getLong()
                 Platform.SWITCH -> getBits(32 * 8)
+                Platform.PSYNET -> getBits(32 * 8)
             }
             val playerNumber = getByte()
 

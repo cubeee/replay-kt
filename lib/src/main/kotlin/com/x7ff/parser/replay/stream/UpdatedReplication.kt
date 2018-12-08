@@ -27,7 +27,7 @@ import com.x7ff.parser.replay.attribute.RepStatTitlesAttribute.Companion.readRep
 import com.x7ff.parser.replay.attribute.ReservationAttribute.Companion.readReservation
 import com.x7ff.parser.replay.attribute.RigidBodyStateAttribute.Companion.readRigidBodyState
 import com.x7ff.parser.replay.attribute.StatEventAttribute.Companion.readStatEvent
-import com.x7ff.parser.replay.attribute.TeamPaint.Companion.readTeamPaint
+import com.x7ff.parser.replay.attribute.TeamPaintAttribute.Companion.readTeamPaint
 import com.x7ff.parser.replay.attribute.TitleAttribute.Companion.readTitle
 import com.x7ff.parser.replay.attribute.UniqueIdAttribute.Companion.readUniqueId
 import com.x7ff.parser.replay.attribute.WeldedInfoAttribute.Companion.readWeldedInfo
