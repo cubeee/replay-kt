@@ -29,7 +29,7 @@ data class ProductAttribute(
 
         private fun BitBuffer.readPainted(versions: Versions): Int {
             return when {
-                versions >= Versions(868, 18, 0) -> getUInt(31).toInt()
+                versions.gte(868, 18, 0) -> getUInt(31).toInt()
                 else -> getUIntMax(14).toInt()
             }
         }

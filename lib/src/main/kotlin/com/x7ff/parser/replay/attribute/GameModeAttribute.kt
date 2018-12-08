@@ -8,7 +8,7 @@ data class GameModeAttribute(
 ) {
     companion object {
         fun BitBuffer.readGameMode(versions: Versions): GameModeAttribute {
-            val mode = when (versions >= Versions(868, 12, 0)) {
+            val mode = when (versions.gte(868, 12, 0)) {
                 true -> getByte().toLong()
                 false -> getUIntMax(4)
             }
