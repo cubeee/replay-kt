@@ -22,6 +22,7 @@ data class ProductAttribute(
                 "TAGame.ProductAttribute_Painted_TA" -> readPainted(versions)
                 "TAGame.ProductAttribute_UserColor_TA" -> readColor(versions)
                 "TAGame.ProductAttribute_TitleID_TA" -> getFixedLengthString()
+                "TAGame.ProductAttribute_SpecialEdition_TA" -> getBits(31) // TODO: figure out structure
                 else -> throw IllegalArgumentException("Unknown object name $objectName for id $objectId")
             }
             return ProductAttribute(unknown, objectId, objectName, value)
