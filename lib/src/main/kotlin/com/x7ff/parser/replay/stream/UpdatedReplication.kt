@@ -74,6 +74,7 @@ data class UpdatedReplication(
                 "TAGame.GameEvent_TA:MatchTypeClass" -> readObjectTarget()
                 "Engine.GameReplicationInfo:GameClass" -> readObjectTarget()
                 "TAGame.GameEvent_Soccar_TA:SubRulesArchetype" -> readObjectTarget()
+                "TAGame.Ball_TA:ReplicatedPhysMatOverride" -> readObjectTarget()
 
                 "TAGame.CameraSettingsActor_TA:ProfileSettings" -> readCameraSettings(versions)
                 "TAGame.PRI_TA:CameraSettings" -> readCameraSettings(versions)
