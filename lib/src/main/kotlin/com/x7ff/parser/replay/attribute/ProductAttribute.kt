@@ -20,6 +20,7 @@ data class ProductAttribute(
             val objectName = objectReferences[objectId].name
             val value: Any = when(objectName) {
                 "TAGame.ProductAttribute_Painted_TA" -> readPainted(versions)
+                "TAGame.ProductAttribute_TeamEdition_TA" -> readPainted(versions)
                 "TAGame.ProductAttribute_UserColor_TA" -> readColor(versions)
                 "TAGame.ProductAttribute_TitleID_TA" -> getFixedLengthString()
                 "TAGame.ProductAttribute_SpecialEdition_TA" -> getBits(31) // TODO: figure out structure
