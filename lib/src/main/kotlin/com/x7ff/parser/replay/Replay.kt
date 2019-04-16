@@ -83,7 +83,11 @@ data class Replay(
             return parse(path.readBytes(), parseFrames)
         }
 
-        fun parse(buffer: BitBuffer, parseFrames: Boolean = true): Replay {
+        fun parse(
+            buffer: BitBuffer,
+            parseFrames: Boolean = true,
+            strictBufferSize: Boolean = false
+        ): Replay {
             val header = buffer.parseReplayHeader()
             val replayBuffer = buffer.readReplayBuffer()
             val levels = replayBuffer.readLevels()
@@ -100,11 +104,11 @@ data class Replay(
                 .fixClassParents(objectReferences)
                 .calculateMaxPropertyIds()
 
-            if (replayBuffer.hasRemainingBits()) {
+            if (strictBufferSize && replayBuffer.hasRemainingBits()) {
                 throw RuntimeException("Bits remaining in replay buffer: ${replayBuffer.remainingBits()}")
             }
 
-            if (buffer.hasRemainingBits()) {
+            if (strictBufferSize && buffer.hasRemainingBits()) {
                 throw RuntimeException("Bits remaining in main buffer: ${buffer.remainingBits()}")
             }
 

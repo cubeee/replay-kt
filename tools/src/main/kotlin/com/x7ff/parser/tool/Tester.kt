@@ -7,7 +7,7 @@ import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     val path = Paths.get(args[0])
-    val times = 10
+    val times = 1
     for (i in 0 until times) {
         parseReplay(i, path)
     }
