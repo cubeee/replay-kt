@@ -135,7 +135,7 @@ class BulkParseTester(
                 Replay.parse(file)
             }
 
-            replay?.let {
+            replay.let {
                 replay.header.run {
                     val blueGoals: Int = properties.intPropertyOrZero("Team0Score")
                     val orangeGoals: Int = properties.intPropertyOrZero("Team1Score")
@@ -147,8 +147,6 @@ class BulkParseTester(
                     }
                     this
                 }
-            } ?: run {
-                file.markFailed(failFast)
             }
         } catch (e: Exception) {
             file.markFailed(failFast, e)
