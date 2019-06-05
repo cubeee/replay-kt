@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.cubeee.replay-kt:replay-kt:0.1.7'
+    implementation 'com.github.cubeee.replay-kt:replay-kt:0.1.10'
 }
 ```
 
