@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.3.10'
+        kotlinVersion = '1.9.20'
         junitVersion = '4.12'
     }
 
@@ -15,7 +15,6 @@ buildscript {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'kotlin'
 
     group 'com.x7ff'
     version '0.1.10'
@@ -25,18 +24,5 @@ subprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
-    }
-
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
     }
 }
