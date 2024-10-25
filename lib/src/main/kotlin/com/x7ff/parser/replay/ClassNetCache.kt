@@ -21,7 +21,7 @@ data class ClassNetCache(
     }
 
     private fun maxPropertyId(): Int {
-        return allProperties().maxBy { p -> p.id }?.id ?: 0
+        return allProperties().maxBy { p -> p.id }.id
     }
 
     fun getProperty(id: Int): ClassNetCacheProperty? {

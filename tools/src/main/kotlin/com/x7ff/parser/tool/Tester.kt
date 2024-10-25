@@ -15,7 +15,8 @@ fun main(args: Array<String>) {
 
 private fun parseReplay(i: Int, path: Path) {
     val parseTime = measureTimeMillis {
-        Replay.parse(path)
+        //Replay.parse(path, parseFrames = false)
+        Replay.parseHeader(path)
     }
     println("#$i: parsed replay in ${parseTime}ms")
 }

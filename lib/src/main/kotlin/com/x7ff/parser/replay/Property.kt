@@ -18,25 +18,52 @@ data class Property(
             }
 
             val type = getFixedLengthString()
-            getInt() // length
+            val length = getInt()
+
+            if (name == "QWordProperty" && length == 0) {
+                return Property(name)
+            }
+
             getInt()
 
             val value: Any = when (type) {
                 "IntProperty" -> getInt()
                 "StrProperty", "NameProperty" -> getFixedLengthString()
-                "QWordProperty" -> getLong()
+                "QWordProperty" -> if (length == 0) getByte() else getLong()
                 "BoolProperty" -> getByte() == 1.toByte()
                 "FloatProperty" -> getFloat()
                 "ByteProperty" -> {
-                    val propertyType = getFixedLengthString()
-                    val propertyValue = getFixedLengthString()
-                    KeyValuePair(propertyType, propertyValue)
+                    when (val propertyType = getFixedLengthString()) {
+                        "OnlinePlatform_Steam" -> {
+                            KeyValuePair(propertyType, "")
+                        }
+                        "None" -> {
+                            getByte()
+                            KeyValuePair(propertyType, "")
+                        }
+                        else -> {
+                            val propertyValue = getFixedLengthString()
+                            KeyValuePair(propertyType, propertyValue)
+                        }
+                    }
                 }
                 "ArrayProperty" -> {
                     val len = getInt()
                     val propertiesList = mutableListOf<List<Property>>()
                     for (i in 0 until len) {
                         propertiesList.add(readProperties())
+                    }
+                    propertiesList.toList()
+                }
+                "StructProperty" -> {
+                    getFixedLengthString() // Name
+                    val propertiesList = mutableListOf<Property>()
+                    while (hasRemaining()) {
+                        val prop = readProperty()
+                        if (prop.name == "None") {
+                            break
+                        }
+                        propertiesList.add(prop)
                     }
                     propertiesList.toList()
                 }
