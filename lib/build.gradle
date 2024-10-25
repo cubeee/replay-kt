@@ -13,3 +13,15 @@ jar {
     }
     archivesBaseName = "replay-kt"
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = 'replay-kt'
+            version = version
+
+            from components.kotlin
+        }
+    }
+}
